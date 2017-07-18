@@ -21,7 +21,7 @@ objdump beautifier
 * GNU objdump (GNU Binutils for Ubuntu) 2.26.1
 * GNU objdump (GNU Binutils for Raspbian) 2.25
 
-## Note
+## Notes
 
 * `bod` will work properly only on a system using an English locale
 * `bod` is not compatible with the `-r` and `-R` options of `objdump`
