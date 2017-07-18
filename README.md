@@ -9,7 +9,6 @@ readable
 
 ## Supported Targets
 
-In the current version of `bod` the following targets are supported:
 * elf32-littlearm
 * elf32-tradlittlemips
 * elf32-i386
@@ -22,18 +21,18 @@ In the current version of `bod` the following targets are supported:
 
 ## Note
 
-`bod` will work properly on a system using an English locale
+`bod` will work properly only on a system using an English locale
 
 # Installation
 
-Download `bod` and put it in `/usr/local/bin`
+Download `bod`, put it in `/usr/local/bin` and make it executable
 
 
 # Usage
 
 ## Basic
 
-Pipe `objdump`'s output to bod, for example with:
+Pipe `objdump`'s output to `bod`, for example with:
 
 ``` bash
 objdump -d ./binary | bod
@@ -48,5 +47,5 @@ objdump -d ./binary | bod | less -R
 ## Main options
 
 `bod` allows:
-* to have a glance at what is in the code with `-l` or `--list`
+* to have a glance at what is in the binary with `-l` or `--list`
 * to look at the disassembly of a single function with `-f` or `--function`
