@@ -4,7 +4,7 @@ objdump beautifier
 ![screenshot](screenshot.png)
 
 ## Aim
-`bod` (for Beautify ObjDump) is a `python` script that
+`bod` (Beautify ObjDump) is a `python` script that
 * colorizes objdump's output to make it more readable
 * allows to disassemble a single function (see Main options)
 * allows to have a glance at the binary (see Main options)
