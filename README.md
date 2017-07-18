@@ -4,8 +4,10 @@ objdump beautifier
 ![screenshot](screenshot.png)
 
 ## Aim
-`bod` (for Beautify ObjDump) is a `python` script that colorizes objdump's
-output to make it more readable
+`bod` (for Beautify ObjDump) is a `python` script that
+* colorizes objdump's output to make it more readable
+* allows to disassemble a single function (see [Main options](#options))
+* allows to have a glance at the binary (see [Main options](#options))
 
 ## Supported Targets
 
@@ -22,7 +24,7 @@ output to make it more readable
 ## Note
 
 * `bod` will work properly only on a system using an English locale
-* `bod` is not compatible with `-r` and `-R` options of `objdump`
+* `bod` is not compatible with the `-r` and `-R` options of `objdump`
 
 # Installation
 
@@ -48,7 +50,7 @@ If needed, this output can itself be piped to `less` thanks to
 objdump -d ./binary | bod | less -R
 ```
 
-## Main options
+## Main options {#options}
 
 `bod` allows:
 * to have a glance at what is in the binary with `-l` or `--list`
