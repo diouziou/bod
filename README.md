@@ -21,12 +21,16 @@ readable
 
 ## Note
 
-`bod` will work properly only on a system using an English locale
+* `bod` will work properly only on a system using an English locale
+* `bod` is not compatible with `-r` and `-R` options of `objdump`
 
 # Installation
 
-Download `bod`, put it in `/usr/local/bin` and make it executable
-
+``` bash
+cd /usr/local/src
+sudo git clone https://github.com/diouziou/bod
+sudo cp bod/bod /usr/local/bin/bod
+```
 
 # Usage
 
