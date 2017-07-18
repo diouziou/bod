@@ -1,17 +1,28 @@
 # bod
 objdump beautifier
 
-## aim
+![screenshot](screenshot.png)
+
+## Aim
 `bod` (for Beautify ObjDump) colorizes objdump's output to make it more
 readable
 
-## supported targets
+## Supported Targets
 
 In the current version of `bod` the following targets are supported:
 * elf32-littlearm
 * elf32-tradlittlemips
 * elf32-i386
 * elf64-x86-64
+
+## Tested versions of objdump
+
+* GNU objdump (GNU Binutils for Ubuntu) 2.26.1
+* GNU objdump (GNU Binutils for Raspbian) 2.25
+
+## Note
+
+`bod` will work properly on a system using an English locale
 
 # Installation
 
