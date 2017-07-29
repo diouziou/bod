@@ -495,16 +495,21 @@ class Beautify__elf32_littlearm(Beautify):
 	# conditions, in this order, cf
 	# http://vision.gel.ulaval.ca/~jflalonde/cours/1001/h17/docs/arm-instructionset.pdf
 	cond = ['eq', 'ne', 'cs', 'cc', 'mi', 'pl', 'vs', 'vc',
-			'hi', 'ls', 'ge', 'lt', 'gt', 'le', 'al']
+			'hi', 'ls', 'ge', 'lt', 'gt', 'le', 'al', '']
 #			'hs', 'lo']
 #	 		'hs' and 'lo' are synonyms of 'cs' and 'cc' resp., see
 # 			http://infocenter.arm.com/help/topic/com.arm.doc.qrc0001l/QRC0001_UAL.pdf
 # 			but they are not used by objdump
+
+	# width specifier
+	width_spec = ['.w', '.n', '']
+
 	branch_mnemonics = ['b', 'bl', 'bx', 'blx']
-	all_branch_mnemonics = list(branch_mnemonics)
+	all_branch_mnemonics = []
 	for m in branch_mnemonics:
 		for c in cond:
-			all_branch_mnemonics.append(m + c)
+			for w in width_spec:
+				all_branch_mnemonics.append(m + c + w)
 
 	all_interrupt_mnemonics = ['svc']
 	for c in cond:
