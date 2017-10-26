@@ -9,8 +9,9 @@ import argparse
 import re
 import sys
 
-VERSION = '1.0.8'
-SUPPORTED_TARGETS = ['elf32-littlearm', 'elf32-tradlittlemips', 'elf32-i386', 'elf64-x86-64']
+VERSION = '1.0.9'
+SUPPORTED_TARGETS = ['elf32-littlearm', 'elf32-tradlittlemips',
+	'elf32-tradbigmips', 'elf32-i386', 'elf64-x86-64']
 
 # ugly hack to escape [ and ]
 ESCLP = 'y=y=y'
@@ -244,9 +245,9 @@ class Custom__elf32_littlearm(Custom):
 	def brackets(self, symbol, color):
 		return color.white(symbol)
 
-class Custom__elf32_tradlittlemips(Custom):
-	""" elf32-tradlittlemips customizable items """
-
+# group what is common between targets elf32_tradlittlemips and
+# elf32_tradbigemips
+class Custom__elf32_tradmips(Custom):
 	def __init__(self, color):
 		Custom.__init__(self, color)
 		# a space is added after the comma (to make things more readable,
@@ -262,6 +263,16 @@ class Custom__elf32_tradlittlemips(Custom):
 
 	def brackets(self, symbol, color):
 		return color.white(symbol)
+
+class Custom__elf32_tradlittlemips(Custom__elf32_tradmips):
+	""" elf32-tradlittlemips customizable items """
+	def __init__(self, color):
+		Custom__elf32_tradmips.__init__(self, color)
+
+class Custom__elf32_tradbigmips(Custom__elf32_tradmips):
+	""" elf32-tradbigmips customizable items """
+	def __init__(self, color):
+		Custom__elf32_tradmips.__init__(self, color)
 
 # group what is common between targets elf32-i386 and elf64-x86-64
 class Custom__elf_86(Custom):
@@ -608,9 +619,9 @@ class Beautify__elf32_littlearm(Beautify):
 		op = color.colorize(op, custom.default_operands)
 		return op
 
-class Beautify__elf32_tradlittlemips(Beautify):
-	""" elf32-tradlittlemips beautify items """
-
+# group what is common between targets elf32_tradlittlemips and
+# elf32_tradbigemips
+class Beautify__elf32_tradmips(Beautify):
 	def __init__(self):
 		Beautify.__init__(self)
 
@@ -622,10 +633,8 @@ class Beautify__elf32_tradlittlemips(Beautify):
 	# and this is not enough... so let's also take this:
 	# https://ti.tuwien.ac.at/cps/teaching/courses/cavo/files/MIPS32-IS.pdf
 	all_branch_mnemonics = ['b', 'bal', 'beq', 'bne', 'bgt', 'bge', 'blt', 'ble',
-							'beqz', 'bnez', 'bgtz', 'bltz', 'bgez', 'blez',
-							'j', 'jal']
-							# , 'jalr'] # jalr seems to be associated to a
-							# register only, not an address
+				'beqz', 'bnez', 'bgtz', 'bltz', 'bgez', 'blez',
+				'j', 'jal', 'jalr']
 
 	all_interrupt_mnemonics = ['syscall']
 
@@ -685,6 +694,15 @@ class Beautify__elf32_tradlittlemips(Beautify):
 		op = color.colorize(op, custom.default_operands)
 		return op
 
+class Beautify__elf32_tradlittlemips(Beautify__elf32_tradmips):
+	""" elf32-tradlittlemips beautify items """
+	def __init__(self):
+		Beautify__elf32_tradmips.__init__(self)
+
+class Beautify__elf32_tradbigmips(Beautify__elf32_tradmips):
+	""" elf32-tradbigmips beautify items """
+	def __init__(self):
+		Beautify__elf32_tradmips.__init__(self)
 
 # group what is common between targets elf32-i386 and elf64-x86-64
 class Beautify__elf_86(Beautify):
@@ -849,6 +867,9 @@ def main():
 			elif state.target == 'elf32-tradlittlemips':
 				custom = Custom__elf32_tradlittlemips(color)
 				beautify = Beautify__elf32_tradlittlemips()
+			elif state.target == 'elf32-tradbigmips':
+				custom = Custom__elf32_tradbigmips(color)
+				beautify = Beautify__elf32_tradbigmips()
 			elif state.target == 'elf32-i386':
 				custom = Custom__elf32_i386(color)
 				beautify = Beautify__elf32_i386()

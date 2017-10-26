@@ -4,7 +4,7 @@ objdump beautifier
 ![screenshot](screenshot.png)
 
 ## Aim
-`bod` (Beautify ObjDump) is a `python` script that
+`bod` (for Beautify ObjDump) is a `python` script that
 * colorizes objdump's output to make it more readable
 * allows to disassemble a single function (see Main options)
 * allows to have a glance at the binary (see Main options)
@@ -13,6 +13,7 @@ objdump beautifier
 
 * elf32-littlearm
 * elf32-tradlittlemips
+* elf32-tradbigmips
 * elf32-i386
 * elf64-x86-64
 
@@ -21,7 +22,7 @@ objdump beautifier
 * GNU objdump (GNU Binutils for Ubuntu) 2.26.1
 * GNU objdump (GNU Binutils for Raspbian) 2.25
 
-## Notes
+## Note
 
 * `bod` will work properly only on a system using an English locale
 * `bod` is not compatible with the `-r` and `-R` options of `objdump`
