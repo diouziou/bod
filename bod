@@ -9,7 +9,7 @@ import argparse
 import re
 import sys
 
-VERSION = '1.0.9'
+VERSION = '1.0.10'
 SUPPORTED_TARGETS = ['elf32-littlearm', 'elf32-tradlittlemips',
 	'elf32-tradbigmips', 'elf32-i386', 'elf64-x86-64']
 
@@ -98,11 +98,11 @@ class Color():
 	UNDERLINE_OFF  = '\x1b[24m'
 	INVERSE_OFF    = '\x1b[27m'
 
-	def rgb(self, r, g, b): 
+	def rgb(self, r, g, b):
 		return str(16 + 36 * r + 6 * g + b)
 	def set_rgb_fore(self, r, g, b):
 		return "\x1b[38;5;" + self.rgb(r, g, b) + "m"
-	
+
 	def bold(self, s):
 		return self.BOLD_ON + s + self.B_AND_F_OFF
 	def faint(self, s):
@@ -313,7 +313,7 @@ class Custom__elf64_x86_64(Custom__elf_86):
 ### -------------------------------------------------------------------- ###
 class Beautify():
 	""" container for beautifying functions """
-	
+
 	def __init__(self):
 		pass
 
@@ -327,7 +327,7 @@ class Beautify():
 		state.file_name = line[:colon_pos]
 		file_fmt_start = line.find(file_fmt_str)
 		file_fmt_end = file_fmt_start + file_fmt_str_len
-		state.target = line[file_fmt_end:]
+		state.target = line[file_fmt_end:].lower()
 		bl = ''
 		bl += color.colorize(state.file_name, color.YELLOW)
 		bl += line[colon_pos:file_fmt_end]
@@ -614,7 +614,7 @@ class Beautify__elf32_littlearm(Beautify):
 		# unescape the {, }, [ and ]
 		op = self.brackets_reverse_pattern.sub( \
 			custom.brackets('\g<1>', color), op)
-	
+
 		color.reset_default()
 		op = color.colorize(op, custom.default_operands)
 		return op
@@ -670,14 +670,14 @@ class Beautify__elf32_tradmips(Beautify):
 
 	def beautify_operands(self, operands, color, custom):
 		color.set_default(custom.default_operands)
-		
+
 		# parenthesis
 		op = self.brackets_pattern.sub(custom.brackets('\g<1>', color),
 			operands)
-		
+
 		# commas
 		op = self.comma_pattern.sub(custom.comma, op)
-		
+
 		# addresses from branches
 		op = self.addresses_from_branches_pattern.sub( \
 			custom.func_addr('\g<1>', color) + ' ' + \
@@ -742,7 +742,7 @@ class Beautify__elf_86(Beautify):
 		ce, cp = self.comment_exists(split_line)
 		if ce:
 			if cp != 2:
-				print('Problem with comment on target {}'.format(state.target)) 
+				print('Problem with comment on target {}'.format(state.target))
 				exit(0)
 			split_comment = split_line[cp].split(self.comment_char)
 			split_comment[1] = self.comment_char + split_comment[1]
@@ -761,7 +761,7 @@ class Beautify__elf_86(Beautify):
 
 	def beautify_operands(self, operands, color, custom):
 		color.set_default(custom.default_operands)
-		
+
 		# homemade escape of [ and ]
 		op = self.brackets_pattern.sub(ESCLS + '\g<1>' + ESCRS, operands)
 
@@ -779,10 +779,10 @@ class Beautify__elf_86(Beautify):
 		op = self.operations_in_brackets_3_pattern.sub( \
 			ESCRS + '\g<1>' + custom.operation(' \g<2> ', color) + \
 			'\g<3>' + ESCLS, op)
-		
+
 		# colons
 		op = self.colon_pattern.sub(custom.colon, op)
-		
+
 		# commas
 		op = self.comma_pattern.sub(custom.comma, op)
 
@@ -805,7 +805,7 @@ class Beautify__elf_86(Beautify):
 			custom.number('\g<1>', color) + ESCLS, op)
 		op = self.numbers_6_pattern.sub(ESCRS + \
 			custom.number('\g<1>', color), op)
-	
+
 		# unescape the [ and ]
 		op = self.brackets_reverse_pattern.sub( \
 			custom.brackets('\g<1>', color), op)
@@ -824,7 +824,7 @@ class Beautify__elf32_i386(Beautify__elf_86):
 class Beautify__elf64_x86_64(Beautify__elf_86):
 	def __init__(self):
 		Beautify__elf_86.__init__(self)
-	
+
 	all_branch_mnemonics = ['call', 'callq']
 	all_interrupt_mnemonics = ['syscall']
 
@@ -832,9 +832,10 @@ class Beautify__elf64_x86_64(Beautify__elf_86):
 ### -------------------------------------------------------------------- ###
 def main():
 	parser = argparse.ArgumentParser(
-		description = 'Beautify ObjDump (bod) v{} \u2764'.format(VERSION),
+		description = 'Beautify ObjDump (bod) v{}'.format(VERSION),
 		prog = 'bod',
 		usage = 'objdump <objdump options> | %(prog)s <%(prog)s options>')
+	parser.add_argument('-v', '--version', action='version', version='v{} by Github user diouziou'.format(VERSION))
 	parser.add_argument('-p', '--palette',
 		default = u'standard',
 		choices = ['standard', 'custom'],
@@ -886,7 +887,7 @@ def main():
 					(args.function == '' or \
 						args.function == state.function)):
 				bl = beautify.line(line.rstrip('\n'), color, custom, state)
-				if isinstance(bl, tuple): 
+				if isinstance(bl, tuple):
 					bl = '\t'.join(bl)
 				print(bl)
 			if not args.list and \
